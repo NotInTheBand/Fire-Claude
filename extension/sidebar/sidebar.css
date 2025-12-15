@@ -625,3 +625,48 @@ body {
 .log-stat-value.tokens {
   color: var(--primary-color);
 }
+
+/* Settings Panel */
+#settingsPanel {
+  padding: 16px;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-group {
+  margin-bottom: 16px;
+}
+
+.settings-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.settings-group input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.settings-group input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.settings-hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.4;
+}

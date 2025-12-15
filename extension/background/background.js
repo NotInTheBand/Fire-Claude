@@ -138,9 +138,12 @@ async function cancelActiveRequest() {
 /**
  * Extract page content via content script
  */
-async function getPageContent(tabId) {
+async function getPageContent(tabId, contentLimit = 10000) {
   try {
-    const response = await browser.tabs.sendMessage(tabId, { type: 'GET_PAGE_CONTENT' });
+    const response = await browser.tabs.sendMessage(tabId, {
+      type: 'GET_PAGE_CONTENT',
+      contentLimit
+    });
     return response;
   } catch (error) {
     console.error('Failed to get page content:', error);
@@ -151,9 +154,12 @@ async function getPageContent(tabId) {
 /**
  * Get simplified HTML from page
  */
-async function getPageHTML(tabId) {
+async function getPageHTML(tabId, contentLimit = 20000) {
   try {
-    const response = await browser.tabs.sendMessage(tabId, { type: 'GET_PAGE_HTML' });
+    const response = await browser.tabs.sendMessage(tabId, {
+      type: 'GET_PAGE_HTML',
+      contentLimit
+    });
     return response.html;
   } catch (error) {
     console.error('Failed to get page HTML:', error);
@@ -186,7 +192,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
 
         case 'SUMMARIZE_PAGE': {
-          const pageData = await getPageContent(message.tabId);
+          const pageData = await getPageContent(message.tabId, message.contentLimit);
           const content = `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`;
           const response = await sendNativeMessage({
             action: 'summarize',
@@ -209,7 +215,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
 
         case 'ASK_QUESTION': {
-          const pageData = await getPageContent(message.tabId);
+          const pageData = await getPageContent(message.tabId, message.contentLimit);
           const content = `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`;
           const response = await sendNativeMessage({
             action: 'ask',
@@ -284,7 +290,9 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
 
         case 'SUGGEST_DOM_CHANGES': {
-          const html = await getPageHTML(message.tabId);
+          // Use content limit for HTML, doubled for DOM structure (max 200KB)
+          const htmlLimit = Math.min((message.contentLimit || 10000) * 2, 200000);
+          const html = await getPageHTML(message.tabId, htmlLimit);
           const response = await sendNativeMessage({
             action: 'suggest_dom_changes',
             html,

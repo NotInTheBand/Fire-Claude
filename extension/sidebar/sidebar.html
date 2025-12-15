@@ -22,6 +22,7 @@
       <button class="nav-btn active" data-panel="chat">Chat</button>
       <button class="nav-btn" data-panel="network">Network</button>
       <button class="nav-btn" data-panel="logs">Logs</button>
+      <button class="nav-btn" data-panel="settings">Settings</button>
     </nav>
 
     <main class="sidebar-main">
@@ -72,6 +73,18 @@
         </div>
         <div class="logs-list" id="logsList">
           <div class="logs-empty">No requests logged yet. Make a request to see logs here.</div>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="panel" id="settingsPanel">
+        <div class="settings-content">
+          <div class="settings-group">
+            <label for="promptSizeLimit">Max Prompt Size (characters)</label>
+            <input type="number" id="promptSizeLimit" min="1000" max="200000" value="10000">
+            <p class="settings-hint">Maximum: 200,000 characters. Lower values = faster responses.</p>
+          </div>
+          <button id="saveSettingsBtn" class="action-btn">Save Settings</button>
         </div>
       </div>
     </main>

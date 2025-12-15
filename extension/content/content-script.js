@@ -62,8 +62,9 @@
 
     /**
      * Extract main content from the page
+     * @param {number} limit - Maximum content length in characters
      */
-    getContent() {
+    getContent(limit = 10000) {
       // Special handling for YouTube
       if (this.isYouTube()) {
         return this.extractYouTubeContent();
@@ -93,13 +94,15 @@
         mainElement = document.body;
       }
 
-      return this.extractText(mainElement);
+      return this.extractText(mainElement, limit);
     },
 
     /**
      * Extract text with basic structure preservation
+     * @param {Element} element - DOM element to extract from
+     * @param {number} limit - Maximum content length in characters
      */
-    extractText(element) {
+    extractText(element, limit = 10000) {
       const textParts = [];
       const walker = document.createTreeWalker(
         element,
@@ -142,9 +145,9 @@
         .replace(/\n{3,}/g, '\n\n')
         .trim();
 
-      // Limit to ~10KB for faster processing (reduced from 50KB)
-      if (content.length > 10000) {
-        content = content.substring(0, 10000) + '\n\n[Content truncated for performance...]';
+      // Apply configurable limit (user setting, max 20000)
+      if (content.length > limit) {
+        content = content.substring(0, limit) + '\n\n[Content truncated for performance...]';
       }
 
       return content;
@@ -152,8 +155,9 @@
 
     /**
      * Get simplified HTML for DOM modification suggestions
+     * @param {number} limit - Maximum HTML length in characters
      */
-    getSimplifiedHTML() {
+    getSimplifiedHTML(limit = 20000) {
       const clone = document.body.cloneNode(true);
 
       // Remove non-essential elements
@@ -174,9 +178,9 @@
 
       let html = clone.innerHTML;
 
-      // Limit size to 20KB for faster processing (reduced from 100KB)
-      if (html.length > 20000) {
-        html = html.substring(0, 20000) + '\n<!-- Content truncated for performance -->';
+      // Apply configurable limit (user setting)
+      if (html.length > limit) {
+        html = html.substring(0, limit) + '\n<!-- Content truncated for performance -->';
       }
 
       return html;
@@ -404,7 +408,7 @@
       switch (message.type) {
         case 'GET_PAGE_CONTENT':
           sendResponse({
-            content: PageExtractor.getContent(),
+            content: PageExtractor.getContent(message.contentLimit || 10000),
             url: window.location.href,
             title: document.title
           });
@@ -412,7 +416,7 @@
 
         case 'GET_PAGE_HTML':
           sendResponse({
-            html: PageExtractor.getSimplifiedHTML()
+            html: PageExtractor.getSimplifiedHTML(message.contentLimit || 20000)
           });
           break;
 

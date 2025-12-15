@@ -9,12 +9,53 @@ class FireClaudeSidebar {
     this.pendingChanges = null;
     this.logs = [];
     this.selectedModel = 'sonnet'; // Default to Sonnet 4.5
+    this.settings = {
+      promptSizeLimit: 10000  // Default 10KB, max 20KB
+    };
 
     this.init();
   }
 
   getSelectedModel() {
     return document.getElementById('modelSelect')?.value || this.selectedModel;
+  }
+
+  async loadSettings() {
+    try {
+      const stored = await browser.storage.local.get('settings');
+      if (stored.settings) {
+        this.settings = { ...this.settings, ...stored.settings };
+      }
+      // Update UI with loaded value
+      const input = document.getElementById('promptSizeLimit');
+      if (input) {
+        input.value = this.settings.promptSizeLimit;
+      }
+    } catch (error) {
+      console.error('Failed to load settings:', error);
+    }
+  }
+
+  async saveSettings() {
+    const input = document.getElementById('promptSizeLimit');
+    let limit = parseInt(input.value, 10);
+
+    // Enforce bounds: min 1000, max 200000
+    if (isNaN(limit) || limit < 1000) {
+      limit = 1000;
+    } else if (limit > 200000) {
+      limit = 200000;
+    }
+
+    this.settings.promptSizeLimit = limit;
+    input.value = limit; // Update UI to show enforced value
+
+    try {
+      await browser.storage.local.set({ settings: this.settings });
+      this.addMessage('system', `Settings saved! Max prompt size: ${limit.toLocaleString()} characters`);
+    } catch (error) {
+      this.addMessage('error', `Failed to save settings: ${error.message}`);
+    }
   }
 
   async init() {
@@ -26,6 +67,7 @@ class FireClaudeSidebar {
 
     this.bindEvents();
     this.checkConnection();
+    this.loadSettings();
 
     // Listen for tab changes
     browser.tabs.onActivated.addListener(async (activeInfo) => {
@@ -74,6 +116,9 @@ class FireClaudeSidebar {
 
     // Logs
     document.getElementById('clearLogsBtn').addEventListener('click', () => this.clearLogs());
+
+    // Settings
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => this.saveSettings());
 
     // Modal
     document.getElementById('modalClose').addEventListener('click', () => this.hideModal());
@@ -181,7 +226,8 @@ class FireClaudeSidebar {
         type: 'ASK_QUESTION',
         tabId: this.currentTabId,
         question,
-        model: this.getSelectedModel()
+        model: this.getSelectedModel(),
+        contentLimit: this.settings.promptSizeLimit
       });
 
       if (response.success) {
@@ -218,7 +264,8 @@ class FireClaudeSidebar {
       const response = await browser.runtime.sendMessage({
         type: 'SUMMARIZE_PAGE',
         tabId: this.currentTabId,
-        model: this.getSelectedModel()
+        model: this.getSelectedModel(),
+        contentLimit: this.settings.promptSizeLimit
       });
 
       if (response.success) {
@@ -257,7 +304,8 @@ class FireClaudeSidebar {
         type: 'SUGGEST_DOM_CHANGES',
         tabId: this.currentTabId,
         request,
-        model: this.getSelectedModel()
+        model: this.getSelectedModel(),
+        contentLimit: this.settings.promptSizeLimit
       });
 
       if (response.success) {
