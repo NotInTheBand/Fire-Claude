@@ -9,12 +9,19 @@
   <div class="sidebar-container">
     <header class="sidebar-header">
       <h1>Fire Claude</h1>
-      <div class="connection-status" id="connectionStatus">Connecting...</div>
+      <div class="header-controls">
+        <select id="modelSelect" class="model-select">
+          <option value="sonnet">Sonnet 4.5</option>
+          <option value="opus">Opus 4.5</option>
+        </select>
+        <div class="connection-status" id="connectionStatus">Connecting...</div>
+      </div>
     </header>
 
     <nav class="sidebar-nav">
       <button class="nav-btn active" data-panel="chat">Chat</button>
       <button class="nav-btn" data-panel="network">Network</button>
+      <button class="nav-btn" data-panel="logs">Logs</button>
     </nav>
 
     <main class="sidebar-main">
@@ -37,7 +44,10 @@
             placeholder="Ask a question about this page..."
             rows="2"
           ></textarea>
-          <button id="sendBtn" class="send-btn">Send</button>
+          <div class="input-buttons">
+            <button id="cancelBtn" class="cancel-btn" style="display: none;">Cancel</button>
+            <button id="sendBtn" class="send-btn">Send</button>
+          </div>
         </div>
       </div>
 
@@ -52,6 +62,17 @@
           <div class="network-empty">No network requests recorded yet. Navigate to a page to start tracking.</div>
         </div>
         <div class="network-analysis" id="networkAnalysis"></div>
+      </div>
+
+      <!-- Logs Panel -->
+      <div class="panel" id="logsPanel">
+        <div class="logs-controls">
+          <button id="clearLogsBtn" class="action-btn secondary">Clear Logs</button>
+          <span class="log-count" id="logCount">0 entries</span>
+        </div>
+        <div class="logs-list" id="logsList">
+          <div class="logs-empty">No requests logged yet. Make a request to see logs here.</div>
+        </div>
       </div>
     </main>
 

@@ -49,6 +49,36 @@ body {
   color: var(--primary-color);
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-select {
+  padding: 4px 8px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 11px;
+  cursor: pointer;
+  outline: none;
+}
+
+.model-select:hover {
+  border-color: var(--primary-color);
+}
+
+.model-select:focus {
+  border-color: var(--primary-color);
+}
+
+.model-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
 .connection-status {
   font-size: 11px;
   color: var(--text-secondary);
@@ -227,6 +257,12 @@ body {
   color: var(--text-secondary);
 }
 
+.input-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .send-btn {
   padding: 10px 16px;
   background: var(--primary-color);
@@ -246,6 +282,22 @@ body {
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.cancel-btn {
+  padding: 8px 16px;
+  background: var(--error-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #d32f2f;
 }
 
 /* Network Panel */
@@ -433,4 +485,143 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+/* Logs Panel */
+#logsPanel {
+  padding: 16px;
+}
+
+.logs-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.log-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.logs-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.logs-empty {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+}
+
+.log-entry {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.log-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.log-action {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.log-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.log-meta .duration {
+  color: var(--success-color);
+}
+
+.log-meta .error {
+  color: var(--error-color);
+}
+
+.log-meta .cancelled {
+  color: #ff9800;
+}
+
+.log-details {
+  display: none;
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+}
+
+.log-entry.expanded .log-details {
+  display: block;
+}
+
+.log-section {
+  margin-bottom: 12px;
+}
+
+.log-section:last-child {
+  margin-bottom: 0;
+}
+
+.log-section-title {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.log-section-content {
+  background: var(--bg-primary);
+  padding: 8px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.log-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.log-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-stat-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.log-stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.log-stat-value.tokens {
+  color: var(--primary-color);
 }

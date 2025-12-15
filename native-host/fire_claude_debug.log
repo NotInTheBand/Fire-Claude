@@ -1,0 +1,104 @@
+2025-12-15 03:05:05,972 - INFO - === Received message: action=ping, requestId=1 ===
+2025-12-15 03:05:07,986 - INFO - === Received message: action=summarize, requestId=2 ===
+2025-12-15 03:05:07,986 - INFO - query_claude called: request_id=2, model=sonnet, context_len=1560, prompt_len=51
+2025-12-15 03:05:07,986 - INFO - Full prompt size: 1613 chars
+2025-12-15 03:05:07,986 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:05:07,988 - INFO - Wrote 1613 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmpm4ecdmu7.txt
+2025-12-15 03:05:07,988 - INFO - Starting subprocess (shell): "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p "C:\Users\BPHos\AppData\Local\Temp\tmpm4ecdmu7.txt" --model sonnet
+2025-12-15 03:05:08,186 - INFO - Subprocess started with PID: 41044
+2025-12-15 03:05:08,186 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:05:10,199 - INFO - Process is running, waiting for completion...
+2025-12-15 03:05:19,996 - INFO - Subprocess completed. stdout=167 chars, stderr=0 chars
+2025-12-15 03:05:19,996 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmpm4ecdmu7.txt
+2025-12-15 03:07:32,643 - INFO - === Received message: action=ping, requestId=1 ===
+2025-12-15 03:07:33,942 - INFO - === Received message: action=summarize, requestId=2 ===
+2025-12-15 03:07:33,942 - INFO - query_claude called: request_id=2, model=sonnet, context_len=1560, prompt_len=51
+2025-12-15 03:07:33,942 - INFO - Full prompt size: 1613 chars
+2025-12-15 03:07:33,942 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:07:33,942 - INFO - Starting subprocess (shell, stdin): "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:07:33,949 - INFO - Subprocess started with PID: 45924
+2025-12-15 03:07:33,949 - INFO - Sending 1613 chars via stdin...
+2025-12-15 03:10:33,963 - ERROR - Subprocess timed out after 180s!
+2025-12-15 03:12:25,728 - INFO - === Received message: action=ping, requestId=1 ===
+2025-12-15 03:12:30,493 - INFO - === Received message: action=summarize, requestId=2 ===
+2025-12-15 03:12:30,493 - INFO - query_claude called: request_id=2, model=sonnet, context_len=1560, prompt_len=51
+2025-12-15 03:12:30,493 - INFO - Full prompt size: 1613 chars
+2025-12-15 03:12:30,493 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:12:30,495 - INFO - Wrote 1613 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmppfkfjehi.txt
+2025-12-15 03:12:30,495 - INFO - Starting subprocess (shell): "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p "C:\Users\BPHos\AppData\Local\Temp\tmppfkfjehi.txt" --model sonnet
+2025-12-15 03:12:30,502 - INFO - Subprocess started with PID: 44504
+2025-12-15 03:12:30,502 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:12:43,727 - INFO - Subprocess completed. stdout=179 chars, stderr=0 chars
+2025-12-15 03:12:43,728 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmppfkfjehi.txt
+2025-12-15 03:15:51,240 - INFO - === Received message: action=ping, requestId=1 ===
+2025-12-15 03:15:52,432 - INFO - === Received message: action=summarize, requestId=2 ===
+2025-12-15 03:15:52,432 - INFO - query_claude called: request_id=2, model=sonnet, context_len=1560, prompt_len=51
+2025-12-15 03:15:52,432 - INFO - Full prompt size: 1613 chars
+2025-12-15 03:15:52,432 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:15:52,434 - INFO - Wrote 1613 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmpfkl_pqrm.txt
+2025-12-15 03:15:52,434 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmpfkl_pqrm.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:15:52,441 - INFO - Subprocess started with PID: 58520
+2025-12-15 03:15:52,441 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:16:00,479 - INFO - Subprocess completed. stdout=754 chars, stderr=0 chars
+2025-12-15 03:16:00,479 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmpfkl_pqrm.txt
+2025-12-15 03:16:20,061 - INFO - === Received message: action=ask, requestId=3 ===
+2025-12-15 03:16:20,061 - INFO - query_claude called: request_id=3, model=sonnet, context_len=1592, prompt_len=45
+2025-12-15 03:16:20,061 - INFO - Full prompt size: 1639 chars
+2025-12-15 03:16:20,061 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:16:20,061 - INFO - Wrote 1639 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmpem3i7ilv.txt
+2025-12-15 03:16:20,061 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmpem3i7ilv.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:16:20,068 - INFO - Subprocess started with PID: 33036
+2025-12-15 03:16:20,068 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:16:29,237 - INFO - Subprocess completed. stdout=894 chars, stderr=0 chars
+2025-12-15 03:16:29,237 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmpem3i7ilv.txt
+2025-12-15 03:16:43,215 - INFO - === Received message: action=suggest_dom_changes, requestId=4 ===
+2025-12-15 03:16:43,215 - INFO - query_claude called: request_id=4, model=sonnet, context_len=20024, prompt_len=680
+2025-12-15 03:16:43,215 - INFO - Full prompt size: 20706 chars
+2025-12-15 03:16:43,215 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:16:43,216 - INFO - Wrote 20706 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmp9qnb1fjy.txt
+2025-12-15 03:16:43,216 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmp9qnb1fjy.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:16:43,224 - INFO - Subprocess started with PID: 48916
+2025-12-15 03:16:43,224 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:16:52,055 - INFO - Subprocess completed. stdout=1435 chars, stderr=0 chars
+2025-12-15 03:16:52,056 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmp9qnb1fjy.txt
+2025-12-15 03:17:50,024 - INFO - === Received message: action=ask, requestId=5 ===
+2025-12-15 03:17:50,025 - INFO - query_claude called: request_id=5, model=sonnet, context_len=4947, prompt_len=28
+2025-12-15 03:17:50,025 - INFO - Full prompt size: 4977 chars
+2025-12-15 03:17:50,025 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:17:50,025 - INFO - Wrote 4977 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmpua1pi4dp.txt
+2025-12-15 03:17:50,025 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmpua1pi4dp.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:17:50,035 - INFO - Subprocess started with PID: 132056
+2025-12-15 03:17:50,035 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:18:04,819 - INFO - Subprocess completed. stdout=1541 chars, stderr=0 chars
+2025-12-15 03:18:04,819 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmpua1pi4dp.txt
+2025-12-15 03:22:09,819 - INFO - === Received message: action=ping, requestId=1 ===
+2025-12-15 03:22:14,290 - INFO - === Received message: action=suggest_dom_changes, requestId=2 ===
+2025-12-15 03:22:14,290 - INFO - query_claude called: request_id=2, model=sonnet, context_len=20024, prompt_len=686
+2025-12-15 03:22:14,290 - INFO - Full prompt size: 20712 chars
+2025-12-15 03:22:14,290 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:22:14,292 - INFO - Wrote 20712 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmphh3h971r.txt
+2025-12-15 03:22:14,292 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmphh3h971r.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:22:14,299 - INFO - Subprocess started with PID: 30848
+2025-12-15 03:22:14,299 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:22:24,035 - INFO - Subprocess completed. stdout=1242 chars, stderr=0 chars
+2025-12-15 03:22:24,036 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmphh3h971r.txt
+2025-12-15 03:22:53,576 - INFO - === Received message: action=suggest_dom_changes, requestId=3 ===
+2025-12-15 03:22:53,576 - INFO - query_claude called: request_id=3, model=sonnet, context_len=20024, prompt_len=754
+2025-12-15 03:22:53,576 - INFO - Full prompt size: 20780 chars
+2025-12-15 03:22:53,576 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:22:53,577 - INFO - Wrote 20780 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmpkx3hk070.txt
+2025-12-15 03:22:53,577 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmpkx3hk070.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:22:53,584 - INFO - Subprocess started with PID: 58180
+2025-12-15 03:22:53,584 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:23:17,224 - INFO - Subprocess completed. stdout=4212 chars, stderr=0 chars
+2025-12-15 03:23:17,225 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmpkx3hk070.txt
+2025-12-15 03:23:49,998 - INFO - === Received message: action=ask, requestId=4 ===
+2025-12-15 03:23:49,998 - INFO - query_claude called: request_id=4, model=sonnet, context_len=1347, prompt_len=28
+2025-12-15 03:23:49,998 - INFO - Full prompt size: 1377 chars
+2025-12-15 03:23:49,998 - INFO - Claude path found: C:\Users\BPHos\AppData\Roaming\npm\claude.CMD
+2025-12-15 03:23:49,999 - INFO - Wrote 1377 chars to temp file: C:\Users\BPHos\AppData\Local\Temp\tmp0yoqu59p.txt
+2025-12-15 03:23:49,999 - INFO - Starting subprocess (type pipe): type "C:\Users\BPHos\AppData\Local\Temp\tmp0yoqu59p.txt" | "C:\Users\BPHos\AppData\Roaming\npm\claude.CMD" -p - --model sonnet
+2025-12-15 03:23:50,007 - INFO - Subprocess started with PID: 90132
+2025-12-15 03:23:50,007 - INFO - Waiting for subprocess to complete...
+2025-12-15 03:23:56,299 - INFO - Subprocess completed. stdout=255 chars, stderr=0 chars
+2025-12-15 03:23:56,299 - INFO - Cleaned up temp file: C:\Users\BPHos\AppData\Local\Temp\tmp0yoqu59p.txt

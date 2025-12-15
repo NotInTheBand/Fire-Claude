@@ -8,6 +8,9 @@ let nativePort = null;
 let pendingRequests = new Map();
 let requestIdCounter = 0;
 
+// Track active request for cancellation
+let activeRequestId = null;
+
 // Network request tracking per tab
 let networkRequests = new Map();
 
@@ -22,13 +25,23 @@ function getNativePort() {
       nativePort.onMessage.addListener((response) => {
         const requestId = response.requestId;
         if (pendingRequests.has(requestId)) {
-          const { resolve, reject } = pendingRequests.get(requestId);
+          const { resolve, reject, startTime } = pendingRequests.get(requestId);
           pendingRequests.delete(requestId);
 
+          // Clear active request if this was it
+          if (activeRequestId === requestId) {
+            activeRequestId = null;
+          }
+
+          // Add client-side timing if not provided
+          if (!response.duration_ms) {
+            response.duration_ms = Date.now() - startTime;
+          }
+
           if (response.success) {
-            resolve(response.result);
+            resolve(response);
           } else {
-            reject(new Error(response.error || 'Unknown error'));
+            reject(new Error(response.error || response.result || 'Unknown error'));
           }
         }
       });
@@ -36,6 +49,7 @@ function getNativePort() {
       nativePort.onDisconnect.addListener((p) => {
         console.error("Native port disconnected:", p.error || "unknown reason");
         nativePort = null;
+        activeRequestId = null;
 
         // Reject all pending requests
         pendingRequests.forEach(({ reject }) => {
@@ -52,31 +66,73 @@ function getNativePort() {
 }
 
 /**
- * Send message to native host and await response
+ * Send message to native host and await response (returns full response with metadata)
  */
 function sendNativeMessage(message) {
   return new Promise((resolve, reject) => {
     const requestId = ++requestIdCounter;
     message.requestId = requestId;
 
-    pendingRequests.set(requestId, { resolve, reject });
+    const startTime = Date.now();
+    pendingRequests.set(requestId, { resolve, reject, startTime });
+
+    // Track as active request (for cancellation)
+    activeRequestId = requestId;
 
     try {
       const port = getNativePort();
       port.postMessage(message);
     } catch (error) {
       pendingRequests.delete(requestId);
+      activeRequestId = null;
       reject(error);
     }
 
-    // Timeout after 2 minutes
+    // Timeout after 3 minutes (matches Python host timeout of 180s)
     setTimeout(() => {
       if (pendingRequests.has(requestId)) {
         pendingRequests.delete(requestId);
+        if (activeRequestId === requestId) {
+          activeRequestId = null;
+        }
         reject(new Error('Request timed out'));
       }
-    }, 120000);
+    }, 180000);
   });
+}
+
+/**
+ * Cancel the active request
+ */
+async function cancelActiveRequest() {
+  if (activeRequestId === null) {
+    return { success: false, error: 'No active request to cancel' };
+  }
+
+  const targetId = activeRequestId;
+
+  // Reject the pending promise immediately
+  if (pendingRequests.has(targetId)) {
+    const { reject } = pendingRequests.get(targetId);
+    pendingRequests.delete(targetId);
+    reject(new Error('Request cancelled by user'));
+  }
+
+  activeRequestId = null;
+
+  // Tell native host to kill the subprocess
+  try {
+    const port = getNativePort();
+    port.postMessage({
+      action: 'cancel',
+      targetRequestId: targetId,
+      requestId: ++requestIdCounter
+    });
+  } catch (error) {
+    console.error('Failed to send cancel to native host:', error);
+  }
+
+  return { success: true, cancelled: true };
 }
 
 /**
@@ -112,38 +168,89 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   (async () => {
     try {
       switch (message.type) {
-        case 'PING_NATIVE':
-          const pong = await sendNativeMessage({ action: 'ping' });
-          sendResponse({ success: true, result: pong });
+        case 'PING_NATIVE': {
+          const response = await sendNativeMessage({ action: 'ping' });
+          sendResponse({ success: true, result: response.result });
           break;
+        }
+
+        case 'CANCEL_REQUEST': {
+          const result = await cancelActiveRequest();
+          sendResponse(result);
+          break;
+        }
+
+        case 'GET_ACTIVE_REQUEST': {
+          sendResponse({ activeRequestId });
+          break;
+        }
 
         case 'SUMMARIZE_PAGE': {
           const pageData = await getPageContent(message.tabId);
-          const result = await sendNativeMessage({
+          const content = `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`;
+          const response = await sendNativeMessage({
             action: 'summarize',
-            content: `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`
+            content,
+            model: message.model || 'sonnet'
           });
-          sendResponse({ success: true, result });
+          sendResponse({
+            success: response.success,
+            result: response.result,
+            log: {
+              action: 'summarize',
+              prompt_size: response.prompt_size,
+              prompt_preview: response.prompt_preview,
+              response_size: response.response_size,
+              response_preview: response.response_preview,
+              duration_ms: response.duration_ms
+            }
+          });
           break;
         }
 
         case 'ASK_QUESTION': {
           const pageData = await getPageContent(message.tabId);
-          const result = await sendNativeMessage({
+          const content = `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`;
+          const response = await sendNativeMessage({
             action: 'ask',
             question: message.question,
-            content: `Title: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.content}`
+            content,
+            model: message.model || 'sonnet'
           });
-          sendResponse({ success: true, result });
+          sendResponse({
+            success: response.success,
+            result: response.result,
+            log: {
+              action: 'ask',
+              question: message.question,
+              prompt_size: response.prompt_size,
+              prompt_preview: response.prompt_preview,
+              response_size: response.response_size,
+              response_preview: response.response_preview,
+              duration_ms: response.duration_ms
+            }
+          });
           break;
         }
 
         case 'EXPLAIN_SELECTION': {
-          const result = await sendNativeMessage({
+          const response = await sendNativeMessage({
             action: 'explain',
-            selection: message.selection
+            selection: message.selection,
+            model: message.model || 'sonnet'
           });
-          sendResponse({ success: true, result });
+          sendResponse({
+            success: response.success,
+            result: response.result,
+            log: {
+              action: 'explain',
+              prompt_size: response.prompt_size,
+              prompt_preview: response.prompt_preview,
+              response_size: response.response_size,
+              response_preview: response.response_preview,
+              duration_ms: response.duration_ms
+            }
+          });
           break;
         }
 
@@ -156,22 +263,46 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             size: r.responseSize || 'unknown',
             method: r.method
           }));
-          const result = await sendNativeMessage({
+          const response = await sendNativeMessage({
             action: 'analyze_network',
-            networkData
+            networkData,
+            model: message.model || 'sonnet'
           });
-          sendResponse({ success: true, result });
+          sendResponse({
+            success: response.success,
+            result: response.result,
+            log: {
+              action: 'analyze_network',
+              prompt_size: response.prompt_size,
+              prompt_preview: response.prompt_preview,
+              response_size: response.response_size,
+              response_preview: response.response_preview,
+              duration_ms: response.duration_ms
+            }
+          });
           break;
         }
 
         case 'SUGGEST_DOM_CHANGES': {
           const html = await getPageHTML(message.tabId);
-          const result = await sendNativeMessage({
+          const response = await sendNativeMessage({
             action: 'suggest_dom_changes',
             html,
-            request: message.request
+            request: message.request,
+            model: message.model || 'sonnet'
           });
-          sendResponse({ success: true, result });
+          sendResponse({
+            success: response.success,
+            result: response.result,
+            log: {
+              action: 'suggest_dom_changes',
+              prompt_size: response.prompt_size,
+              prompt_preview: response.prompt_preview,
+              response_size: response.response_size,
+              response_preview: response.response_preview,
+              duration_ms: response.duration_ms
+            }
+          });
           break;
         }
 
@@ -195,7 +326,15 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     } catch (error) {
       console.error('Error handling message:', error);
-      sendResponse({ success: false, error: error.message });
+      sendResponse({
+        success: false,
+        error: error.message,
+        log: {
+          action: message.type,
+          error: error.message,
+          duration_ms: 0
+        }
+      });
     }
   })();
 
@@ -257,17 +396,25 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
     const selection = info.selectionText;
 
     try {
-      const result = await sendNativeMessage({
+      const response = await sendNativeMessage({
         action: 'explain',
         selection
       });
 
-      // Send result to sidebar
+      // Send result to sidebar with log data
       browser.runtime.sendMessage({
         type: 'CONTEXT_MENU_RESULT',
         action: 'explain',
         selection,
-        result
+        result: response.result,
+        log: {
+          action: 'explain',
+          prompt_size: response.prompt_size,
+          prompt_preview: response.prompt_preview,
+          response_size: response.response_size,
+          response_preview: response.response_preview,
+          duration_ms: response.duration_ms
+        }
       });
 
       // Open sidebar to show result

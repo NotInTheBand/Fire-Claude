@@ -14,9 +14,61 @@
    */
   const PageExtractor = {
     /**
+     * Check if this is a YouTube page
+     */
+    isYouTube() {
+      return location.hostname.includes('youtube.com');
+    },
+
+    /**
+     * Extract YouTube-specific content (much smaller and more relevant)
+     */
+    extractYouTubeContent() {
+      const parts = [];
+
+      // Video title
+      const title = document.querySelector('h1.ytd-video-primary-info-renderer, h1.ytd-watch-metadata')?.textContent?.trim();
+      if (title) parts.push(`Video Title: ${title}`);
+
+      // Channel name
+      const channel = document.querySelector('#channel-name a, ytd-channel-name a')?.textContent?.trim();
+      if (channel) parts.push(`Channel: ${channel}`);
+
+      // View count and date
+      const viewCount = document.querySelector('#info-strings yt-formatted-string, .view-count')?.textContent?.trim();
+      if (viewCount) parts.push(`Views: ${viewCount}`);
+
+      // Video description (first 2000 chars)
+      const description = document.querySelector('#description-inner, #description yt-formatted-string, ytd-text-inline-expander')?.textContent?.trim();
+      if (description) {
+        const truncatedDesc = description.length > 2000 ? description.substring(0, 2000) + '...' : description;
+        parts.push(`Description:\n${truncatedDesc}`);
+      }
+
+      // Get first few comments if visible
+      const comments = Array.from(document.querySelectorAll('#content-text.ytd-comment-renderer')).slice(0, 3);
+      if (comments.length > 0) {
+        parts.push('\nTop Comments:');
+        comments.forEach((c, i) => {
+          const text = c.textContent?.trim();
+          if (text) {
+            parts.push(`${i + 1}. ${text.substring(0, 200)}${text.length > 200 ? '...' : ''}`);
+          }
+        });
+      }
+
+      return parts.join('\n\n') || 'Could not extract YouTube content. The page may still be loading.';
+    },
+
+    /**
      * Extract main content from the page
      */
     getContent() {
+      // Special handling for YouTube
+      if (this.isYouTube()) {
+        return this.extractYouTubeContent();
+      }
+
       // Try to find main content area
       const mainSelectors = [
         'main',
@@ -90,9 +142,9 @@
         .replace(/\n{3,}/g, '\n\n')
         .trim();
 
-      // Limit to ~50KB
-      if (content.length > 50000) {
-        content = content.substring(0, 50000) + '\n\n[Content truncated...]';
+      // Limit to ~10KB for faster processing (reduced from 50KB)
+      if (content.length > 10000) {
+        content = content.substring(0, 10000) + '\n\n[Content truncated for performance...]';
       }
 
       return content;
@@ -122,9 +174,9 @@
 
       let html = clone.innerHTML;
 
-      // Limit size
-      if (html.length > 100000) {
-        html = html.substring(0, 100000) + '\n<!-- Content truncated -->';
+      // Limit size to 20KB for faster processing (reduced from 100KB)
+      if (html.length > 20000) {
+        html = html.substring(0, 20000) + '\n<!-- Content truncated for performance -->';
       }
 
       return html;
