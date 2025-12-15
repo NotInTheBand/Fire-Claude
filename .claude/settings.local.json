@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"f:\\VS Code\\Fire-Claude\" log --oneline)",
+      "Bash(git -C \"f:\\VS Code\\Fire-Claude\" show --stat eb23ded)",
+      "Bash(dir:*)"
+    ]
+  }
+}

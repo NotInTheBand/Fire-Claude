@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fire Claude</title>
+  <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <div class="sidebar-container">
+    <header class="sidebar-header">
+      <h1>Fire Claude</h1>
+      <div class="connection-status" id="connectionStatus">Connecting...</div>
+    </header>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-panel="chat">Chat</button>
+      <button class="nav-btn" data-panel="network">Network</button>
+    </nav>
+
+    <main class="sidebar-main">
+      <!-- Chat Panel -->
+      <div class="panel active" id="chatPanel">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message system">
+            Welcome to Fire Claude! Ask questions about the current page or use the quick actions below.
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button id="summarizeBtn" class="action-btn">Summarize Page</button>
+          <button id="suggestBtn" class="action-btn">Suggest Changes</button>
+        </div>
+
+        <div class="chat-input-container">
+          <textarea
+            id="chatInput"
+            placeholder="Ask a question about this page..."
+            rows="2"
+          ></textarea>
+          <button id="sendBtn" class="send-btn">Send</button>
+        </div>
+      </div>
+
+      <!-- Network Panel -->
+      <div class="panel" id="networkPanel">
+        <div class="network-controls">
+          <button id="analyzeNetworkBtn" class="action-btn">Analyze Network</button>
+          <button id="refreshNetworkBtn" class="action-btn secondary">Refresh</button>
+          <button id="clearNetworkBtn" class="action-btn secondary">Clear</button>
+        </div>
+        <div class="network-list" id="networkList">
+          <div class="network-empty">No network requests recorded yet. Navigate to a page to start tracking.</div>
+        </div>
+        <div class="network-analysis" id="networkAnalysis"></div>
+      </div>
+    </main>
+
+    <!-- DOM Changes Modal -->
+    <div class="modal" id="domChangesModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Apply Changes?</h2>
+          <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Claude suggests the following changes:</p>
+          <pre id="changesPreview"></pre>
+        </div>
+        <div class="modal-footer">
+          <button id="applyChangesBtn" class="action-btn">Apply Changes</button>
+          <button id="cancelChangesBtn" class="action-btn secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="sidebar.js"></script>
+</body>
+</html>

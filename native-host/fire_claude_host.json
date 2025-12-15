@@ -1,0 +1,7 @@
+{
+  "name": "fire_claude_host",
+  "description": "Native messaging host for Fire Claude extension",
+  "path": "F:\\VS Code\\Fire-Claude\\native-host\\fire_claude_host.bat",
+  "type": "stdio",
+  "allowed_extensions": ["fire-claude@example.org"]
+}

@@ -1,0 +1,49 @@
+{
+  "manifest_version": 2,
+  "name": "Fire Claude",
+  "version": "1.0.0",
+  "description": "AI-powered page analysis using Claude Code CLI",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "fire-claude@example.org",
+      "strict_min_version": "78.0"
+    }
+  },
+
+  "permissions": [
+    "nativeMessaging",
+    "activeTab",
+    "tabs",
+    "webRequest",
+    "webNavigation",
+    "<all_urls>",
+    "contextMenus",
+    "storage"
+  ],
+
+  "background": {
+    "scripts": ["background/background.js"],
+    "persistent": false
+  },
+
+  "sidebar_action": {
+    "default_title": "Fire Claude",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": "icons/icon.svg",
+    "open_at_install": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  }
+}
